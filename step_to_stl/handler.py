@@ -3,42 +3,37 @@ import json
 import os
 import subprocess
 
-from cad_retriever import get_cad_file
+from s3_file_retriever import get_s3_file
 
-print 'Loading...'
+import lambda_env
 
 def lambda_handler(event, context):
-  print 'Running lambda_handler...'
+    print 'Running lambda_handler...'
 
-  cad_file_url = event.get('cad_file_url')
+    s3_bucket = event.get('s3_bucket')
+    s3_object = event.get('s3_object')
 
-  if not cad_file_url:
-    return { 'error': 'No cad_file_url provided' }
+    if not cad_file_url:
+        return { 'error': 'No cad_file_url provided' }
 
-  result = get_cad_file(cad_file_url)
+    result = get_s3_file(s3_bucket, s3_object)
 
-  if result.get('error'): return result
+    command = ' '.join([
+        lambda_env.ld_library_path(),
+        lambda_env.python_path(),
+        'python',
+        'step_to_stl.py',
+        '-i',
+        result.get('filepath'),
+        '-o',
 
-  cwd = os.path.dirname(os.path.abspath(__file__))
- 
-  command = ' '.join([
-    'LD_LIBRARY_PATH=' + cwd + '/oce/lib:' + os.environ['LD_LIBRARY_PATH'],
-    'PYTHONPATH=' + cwd + '/pythonocc/lib:' + os.environ['PYTHONPATH'],
-    'python',
-    'geometry.py',
-    '-f',
-    result.get('cad_file')
-  ])
+    ])
 
-  try:
     print 'Running %s' % command
-    output = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
-    print output
-    return json.loads(output.splitlines()[-1])
-  except subprocess.CalledProcessError, e:
-    print e.output 
-    return { 'error': 'Something went wrong with the file analyzer script' }
-  except ValueError, e:
-    print e
-    return { 'error': 'The file analyzer script did not return JSON' }
 
+    output = subprocess.check_output(command,
+                                     stderr=subprocess.STDOUT,
+                                     shell=True)
+
+    print output
+    return { 'message': output.splitlines()[-1] }
