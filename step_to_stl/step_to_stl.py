@@ -1,8 +1,9 @@
+from __future__ import print_function
+
 import getopt
 import os
 import sys
 
-from __future__ import print_function
 from OCC.StlAPI import StlAPI_Writer
 from OCC.STEPControl import STEPControl_Reader
 from OCC.IFSelect import IFSelect_RetDone, IFSelect_ItemsByEntity
@@ -45,22 +46,23 @@ def main(argv):
     except getopt.GetoptError:
         usage()
 
-  source = None
-  dest = None
-  for opt, arg in opts:
-      if opt in ("-i", "--infile"):
-	  source = arg
-    if opt in ("-o", "--outfile"):
-	dest = arg
-    if
+    source = None
+    dest = None
+    for opt, arg in opts:
+        if opt in ("-i", "--infile"):
+            source = arg
+        if opt in ("-o", "--outfile"):
+            dest = arg
+        if opt in ("-h"):
+            usage()
 
-  if source != None and dest != None:
-      output = convert(source, dest)
-      print("STL File: {}".format(output))
-  else:
-      usage()
+    if source != None and dest != None:
+        output = convert(source, dest)
+        print("STL File: {}".format(output))
+    else:
+        usage()
 
-  sys.exit(0)
+    sys.exit(0)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
