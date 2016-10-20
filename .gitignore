@@ -1,5 +1,8 @@
 /**/*.swp
-/**/oce
-/**/pythonocc
-!/oce
-!/pythonocc
+/**/*.pyc
+
+/*/oce
+/*/pythonocc
+
+/*/test.sh
+/*/lambda_env.py
