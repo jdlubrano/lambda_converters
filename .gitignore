@@ -1,0 +1,5 @@
+/**/*.swp
+/**/oce
+/**/pythonocc
+!/oce
+!/pythonocc
