@@ -35,8 +35,10 @@ StepBasic.py
 StepGeom.py
 StepRepr.py
 StepShape.py
+StlAPI.py
 Sweep.py
 TColgp.py
+TColStd.py
 TCollection.py
 TShort.py
 TopAbs.py
@@ -81,8 +83,10 @@ _StepBasic.so
 _StepGeom.so
 _StepRepr.so
 _StepShape.so
+_StlAPI.so
 _Sweep.so
 _TColgp.so
+_TColStd.so
 _TCollection.so
 _TShort.so
 _TopAbs.so

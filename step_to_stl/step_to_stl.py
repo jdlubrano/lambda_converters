@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import getopt
 import os
+import pdb
 import sys
 
 from OCC.StlAPI import StlAPI_Writer
@@ -15,12 +16,17 @@ def usage():
     sys.exit(2)
 
 def get_shape_from_file(filename):
+    pdb.set_trace()
     step_reader = STEPControl_Reader()
     status = step_reader.ReadFile(filename)
 
     if status == IFSelect_RetDone:
         number_of_roots = step_reader.NbRootsForTransfer()
+    else:
+        raise ConversionError("Could not read {}".format(filename))
 
+    i = 1
+    ok = False
     while not ok and i <= number_of_roots:
         ok = step_reader.TransferRoot(i)
         i += 1
