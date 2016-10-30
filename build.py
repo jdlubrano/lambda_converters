@@ -45,13 +45,13 @@ def copy_libs(build_dir, libs_src, libs_dst, libs_list):
 
 def copy_oce_libs(build_dir):
     libs_src = os.path.join(build_root(), 'oce', 'lib')
-    libs_dst = os.path.join(build_dir, 'oce', 'lib')
+    libs_dst = os.path.join(build_dir, 'lib')
     libs_txt = os.path.join(build_dir, 'libs_oce.txt')
     copy_libs(build_dir, libs_src, libs_dst, libs_txt)
 
 def copy_python_libs(build_dir):
     libs_src = os.path.join(build_root(), 'pythonocc', 'lib', 'OCC')
-    libs_dst = os.path.join(build_dir, 'pythonocc', 'lib', 'OCC')
+    libs_dst = os.path.join(build_dir, 'OCC')
     libs_txt = os.path.join(build_dir, 'libs_pythonocc.txt')
     copy_libs(build_dir, libs_src, libs_dst, libs_txt)
 
