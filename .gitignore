@@ -4,6 +4,8 @@
 
 /*/OCC
 /*/lib
+!/oce/lib
+!/pythonocc/lib
 
 /*/test.sh
 

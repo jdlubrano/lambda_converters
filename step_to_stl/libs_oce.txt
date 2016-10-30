@@ -27,3 +27,4 @@ libTKVRML.so.9
 libTKXMesh.so.9
 libTKXSBase.so.9
 libTKernel.so.9
+libGLU.so.1

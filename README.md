@@ -53,6 +53,9 @@ The steps below assume that the project will be built at
 
 #### Copy libGLU
 
+AWS Lambda functions' runtime environment does not contain libGLU, so we
+need to provide a copy of it.
+
 Find libGLU.so somewhere on your system (or install it, then find it) and
 copy it `/home/ec2-user/lambda_converters/lib`.
 
