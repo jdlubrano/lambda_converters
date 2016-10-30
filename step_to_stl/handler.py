@@ -1,11 +1,14 @@
-# import boto3
+from __future__ import print_function
+
 import json
 import os
-import subprocess
 
-from s3_file_retriever import get_s3_file
+import conversion_error
 
-import lambda_env
+from aws_s3 import get_object
+from step_to_stl import convert
+
+STEP_KEY_PREFIX = 'cad_files/stl/'
 
 def lambda_handler(event, context):
     print 'Running lambda_handler...'
@@ -13,27 +16,28 @@ def lambda_handler(event, context):
     s3_bucket = event.get('s3_bucket')
     s3_object = event.get('s3_object')
 
-    if not cad_file_url:
-        return { 'error': 'No cad_file_url provided' }
+    if not s3_bucket:
+        raise ConversionError('No s3_bucket provided')
 
-    result = get_s3_file(s3_bucket, s3_object)
+    if not s3_object:
+        raise ConversionError('No s3_object provided')
 
-    command = ' '.join([
-        lambda_env.ld_library_path(),
-        lambda_env.python_path(),
-        'python',
-        'step_to_stl.py',
-        '-i',
-        result.get('filepath'),
-        '-o',
+    local_step = os.path.basename(s3_object)
 
-    ])
+    s3 = AwsS3()
 
-    print 'Running %s' % command
+    print('Fetching {}/{} and saving to {}'.format(s3_bucket,
+                                                   s3_object,
+                                                   local_step))
 
-    output = subprocess.check_output(command,
-                                     stderr=subprocess.STDOUT,
-                                     shell=True)
+    s3.get_object(s3_bucket, s3_object, local_step)
 
-    print output
-    return { 'message': output.splitlines()[-1] }
+    stl_file = os.splitext(local_step)[0] + '.stl'
+
+    print('Converting {} to {}'.format(local_step, stl_file))
+    convert(local_step, stl_file)
+
+    s3_key = STEP_KEY_PREFIX + stl_file
+
+    print('Uploading {} to {}/{}'.format(stl_file, s3_bucket, s3_key))
+    s3.upload_file(stl_file, s3_bucket, s3_key)

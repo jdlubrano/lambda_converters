@@ -5,11 +5,11 @@ import os
 import pdb
 import sys
 
+import conversion_error
+
 from OCC.StlAPI import StlAPI_Writer
 from OCC.STEPControl import STEPControl_Reader
 from OCC.IFSelect import IFSelect_RetDone, IFSelect_ItemsByEntity
-
-class ConversionError(Exception): pass
 
 def usage():
     print('step_to_stl.py -i source -o dest')
