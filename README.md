@@ -43,6 +43,22 @@ to have a `test.sh` script in the lambda's root directory
 so that the `LD_LIBRARY_PATH` environment variable can be
 set before running any unit tests.
 
+## Troubleshooting
+
+If you see
+```
+TypeError: in method 'StlAPI_Writer_Write', argument 3 of type 'char const *'
+```
+
+or something complaining about `char const *` arguments, these are a result
+of using SWIG with OpenCascade.  To fix such an issue, pass your string-like
+objects to PythonOCC functions using Python's `str` function.
+
+Example:
+```python
+status = step_reader.ReadFile(str(filename))
+```
+
 ## Rebuilding Binaries
 
 The following steps took place on an AWS EC2 instance

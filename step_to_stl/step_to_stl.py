@@ -17,7 +17,7 @@ def usage():
 
 def get_shape_from_file(filename):
     step_reader = STEPControl_Reader()
-    status = step_reader.ReadFile(filename)
+    status = step_reader.ReadFile(str(filename))
 
     if status == IFSelect_RetDone:
         number_of_roots = step_reader.NbRootsForTransfer()
@@ -42,7 +42,7 @@ def convert(source, dest):
     stl_ascii = False
     stl_writer = StlAPI_Writer()
     stl_writer.SetASCIIMode(stl_ascii)
-    stl_writer.Write(shape, output)
+    stl_writer.Write(shape, str(output))
     return output
 
 def main(argv):

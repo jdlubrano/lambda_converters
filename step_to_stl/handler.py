@@ -22,7 +22,7 @@ def lambda_handler(event, context):
     if not s3_object:
         raise ConversionError('No s3_object provided')
 
-    local_step = os.path.basename(s3_object)
+    local_step = '/tmp/' + os.path.basename(s3_object)
 
     s3 = AwsS3()
 
@@ -37,7 +37,7 @@ def lambda_handler(event, context):
     print('Converting {} to {}'.format(local_step, stl_file))
     convert(local_step, stl_file)
 
-    s3_key = STEP_KEY_PREFIX + stl_file
+    s3_key = STEP_KEY_PREFIX + os.path.basename(stl_file)
 
     print('Uploading {} to {}/{}'.format(stl_file, s3_bucket, s3_key))
     s3.put_object(stl_file, s3_bucket, s3_key)
