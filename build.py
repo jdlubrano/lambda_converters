@@ -2,6 +2,7 @@
 from __future__ import print_function
 import getopt
 import os
+import pdb
 import shutil
 import sys
 
@@ -25,8 +26,10 @@ def copy_common_files(build_dir):
     with open(common_files_txt) as f:
         for common_file in f:
             common_file = common_file.strip()
+            if not common_file: continue
+
             src = os.path.join(build_root(), common_file)
-            dst = os.path.join(build_dir, common_file)
+            dst = os.path.join(build_dir, os.path.basename(common_file))
             print("Copying {} to {}".format(src, dst))
             shutil.copy(src, dst)
 

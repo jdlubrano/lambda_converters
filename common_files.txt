@@ -1,2 +1,4 @@
 lambda_env.py
 test.sh
+
+./utils/aws_s3.py
