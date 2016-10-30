@@ -7,3 +7,6 @@ class AwsS3():
 
     def get_object(self, bucket, key, destination):
         self.client.download_file(bucket, key, destination)
+
+    def put_object(self, filepath, s3_bucket, s3_key):
+        self.client.upload_file(filepath, s3_bucket, s3_key)

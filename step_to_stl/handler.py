@@ -5,13 +5,13 @@ import os
 
 import conversion_error
 
-from aws_s3 import get_object
+from aws_s3 import AwsS3
 from step_to_stl import convert
 
 STEP_KEY_PREFIX = 'cad_files/stl/'
 
 def lambda_handler(event, context):
-    print 'Running lambda_handler...'
+    print('Running lambda_handler...')
 
     s3_bucket = event.get('s3_bucket')
     s3_object = event.get('s3_object')
@@ -32,7 +32,7 @@ def lambda_handler(event, context):
 
     s3.get_object(s3_bucket, s3_object, local_step)
 
-    stl_file = os.splitext(local_step)[0] + '.stl'
+    stl_file = os.path.splitext(local_step)[0] + '.stl'
 
     print('Converting {} to {}'.format(local_step, stl_file))
     convert(local_step, stl_file)
@@ -40,4 +40,4 @@ def lambda_handler(event, context):
     s3_key = STEP_KEY_PREFIX + stl_file
 
     print('Uploading {} to {}/{}'.format(stl_file, s3_bucket, s3_key))
-    s3.upload_file(stl_file, s3_bucket, s3_key)
+    s3.put_object(stl_file, s3_bucket, s3_key)

@@ -16,7 +16,6 @@ def usage():
     sys.exit(2)
 
 def get_shape_from_file(filename):
-    pdb.set_trace()
     step_reader = STEPControl_Reader()
     status = step_reader.ReadFile(filename)
 
