@@ -3,9 +3,9 @@ from __future__ import print_function
 import json
 import os
 
-import conversion_error
 
 from aws_s3 import AwsS3
+from conversion_error import ConversionError
 from step_to_stl import convert
 
 STEP_KEY_PREFIX = 'cad_files/stl/'

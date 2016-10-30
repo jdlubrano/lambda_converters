@@ -5,7 +5,7 @@ import os
 import pdb
 import sys
 
-import conversion_error
+from conversion_error import ConversionError
 
 from OCC.StlAPI import StlAPI_Writer
 from OCC.STEPControl import STEPControl_Reader
