@@ -5,6 +5,9 @@
 /*/lib
 
 /*/test.sh
+
+/*/aws_s3.py
 /*/lambda_env.py
+/*/conversion_error.py
 
 /step_to_stl/*.stl
