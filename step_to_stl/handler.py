@@ -8,9 +8,9 @@ from aws_s3 import AwsS3
 from conversion_error import ConversionError
 from step_to_stl import convert
 
-STEP_KEY_PREFIX = 'cad_files/stl/'
 def stl_key(step_object):
-    return re.sub(r'/(stp|step)/', 'stl', step_object)
+    dest = re.sub(r'/(stp|step)/', '/stl/', step_object)
+    return os.path.splitext(dest)[0] + '.stl'
 
 def lambda_handler(event, context):
     print('Running lambda_handler...')
