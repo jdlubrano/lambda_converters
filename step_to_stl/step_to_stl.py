@@ -47,7 +47,7 @@ def convert(source, dest):
 
 def main(argv):
     try:
-	opts, args = getopt.getopt(argv, "hi:o:", ["infile=", "outfile="])
+        opts, args = getopt.getopt(argv, "hi:o:", ["infile=", "outfile="])
     except getopt.GetoptError:
         usage()
 
