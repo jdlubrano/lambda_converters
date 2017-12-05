@@ -3,7 +3,6 @@ from __future__ import print_function
 import json
 import os
 
-
 from aws_s3 import AwsS3
 from conversion_error import ConversionError
 from step_to_stl import convert
