@@ -25,6 +25,7 @@ def lambda_handler(event, context):
     {'bucket': <bucket>, 'key': <stl_key>}
     """
     print('Running lambda_handler...')
+    print(event)
 
     s3_bucket = event.get('s3_bucket')
     s3_object = event.get('s3_object')
@@ -51,6 +52,7 @@ def proxy_handler_s3(event, context):
     {'bucket': <bucket>, 'key': <stl_key>}
     """
     print('Running proxy_handler_s3...')
+    print(event)
 
     body = json.loads(event['body'])
 
@@ -78,6 +80,7 @@ def proxy_handler_url(event, context):
     {'base64_stl': <base64_STL_contents>}
     """
     print('Running proxy_handler_url...')
+    print(event)
 
     body = json.loads(event['body'])
 
