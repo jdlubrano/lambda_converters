@@ -10,9 +10,18 @@ from aws_s3 import AwsS3
 from conversion_error import ConversionError
 from step_to_stl import convert
 
-STEP_KEY_PREFIX = 'cad_files/stl/'
-
 def lambda_handler(event, context):
+    """
+    Intended for non-proxy integration lambda requests with
+    event = {'s3_bucket': <bucket>, 's3_object': <key> }
+
+    Creates an STL file from the provided STEP file hosted on S3.
+    The STL file ends up in the same location as the STEP file but
+    with a .stl extension.
+
+    Returns a JSON response describing the location of the STL file on S3.
+    {'bucket': <bucket>, 'key': <stl_key>}
+    """
     print('Running lambda_handler...')
 
     s3_bucket = event.get('s3_bucket')
@@ -27,6 +36,17 @@ def lambda_handler(event, context):
     return convert_from_s3(s3_bucket, s3_object)
 
 def proxy_handler_s3(event, context):
+    """
+    Intended for AWS proxy integration lambda requests with
+    event = {'bucket': <bucket>, 'object': <step_key> }
+
+    Creates an STL file from the provided STEP file hosted on S3.
+    The STL file ends up in the same location as the STEP file but
+    with a .stl extension.
+
+    Returns a JSON response describing the location of the STL file on S3.
+    {'bucket': <bucket>, 'key': <stl_key>}
+    """
     print('Running proxy_handler_s3...')
 
     body = json.loads(event['body'])
@@ -47,6 +67,13 @@ def proxy_handler_s3(event, context):
     return {'statusCode': 201, 'body': json.dumps(result)}
 
 def proxy_handler_url(event, context):
+    """
+    Intended for AWS proxy integration lambda requests with
+    event = {'url': <public_url>}
+
+    Returns a JSON response with the base64 encoded contents of the STL file
+    {'base64_stl': <base64_STL_contents>}
+    """
     print('Running proxy_handler_url...')
 
     body = json.loads(event['body'])
@@ -65,6 +92,9 @@ def proxy_handler_url(event, context):
     return {'statusCode': 201, 'body': json.dumps(result)}
 
 def bad_request(missing_key):
+    """
+    Returns JSON for a 400 HTTP response with a descriptive message
+    """
     body = json.dumps({'message': 'No {} provided'.format(missing_key)})
     return {'statusCode': 400, body: body, 'headers': {'Content-Type': 'application/json'}}
 
