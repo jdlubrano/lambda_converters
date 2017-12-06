@@ -2,9 +2,10 @@ from __future__ import print_function
 
 import json
 import os
-import pdb
+# import pdb
 import urllib2
 from base64 import b64encode
+import re
 
 from aws_s3 import AwsS3
 from conversion_error import ConversionError
@@ -16,8 +17,9 @@ def lambda_handler(event, context):
     event = {'s3_bucket': <bucket>, 's3_object': <key> }
 
     Creates an STL file from the provided STEP file hosted on S3.
-    The STL file ends up in the same location as the STEP file but
-    with a .stl extension.
+    The STL file ends up in the same bucket  as the STEP file but
+    replaces all stp/step strings with stl and saves the file with .stl
+    as the extension.
 
     Returns a JSON response describing the location of the STL file on S3.
     {'bucket': <bucket>, 'key': <stl_key>}
@@ -41,8 +43,9 @@ def proxy_handler_s3(event, context):
     event = {'bucket': <bucket>, 'object': <step_key> }
 
     Creates an STL file from the provided STEP file hosted on S3.
-    The STL file ends up in the same location as the STEP file but
-    with a .stl extension.
+    The STL file ends up in the same bucket  as the STEP file but
+    replaces all stp/step strings with stl and saves the file with .stl
+    as the extension.
 
     Returns a JSON response describing the location of the STL file on S3.
     {'bucket': <bucket>, 'key': <stl_key>}
@@ -98,6 +101,10 @@ def bad_request(missing_key):
     body = json.dumps({'message': 'No {} provided'.format(missing_key)})
     return {'statusCode': 400, body: body, 'headers': {'Content-Type': 'application/json'}}
 
+def stl_key(step_object):
+    dest = re.sub(r'/(stp|step)/', '/stl/', step_object)
+    return os.path.splitext(dest)[0] + '.stl'
+
 def convert_from_s3(bucket, key):
     local_step = '/tmp/' + os.path.basename(key)
 
@@ -108,7 +115,7 @@ def convert_from_s3(bucket, key):
     s3.get_object(bucket, key, local_step)
 
     stl_file = convert_step_to_stl(local_step)
-    s3_key = os.path.basename(stl_file)
+    s3_key = stl_key(key)
 
     print('Uploading {} to {}/{}'.format(stl_file, bucket, s3_key))
     s3.put_object(stl_file, bucket, s3_key)
